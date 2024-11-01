@@ -1,0 +1,6 @@
+include CMakeLists.txt
+include LICENSE
+include README.md
+recursive-include lidsor_filter/include *
+recursive-include lidsor_filter/src *
+recursive-include third_party/nanoflann/include *
