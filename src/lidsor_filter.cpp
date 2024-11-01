@@ -15,7 +15,7 @@ struct PointCloud {
     bool kdtree_get_bbox(BBOX&) const { return false; }
 };
 
-std::vector<std::array<float, 3>> filtering_lidsor_cpp(
+std::vector<std::array<float, 4>> filtering_lidsor_cpp(
     const py::array_t<float>& input_points,
     int k,
     float s,
@@ -89,16 +89,22 @@ std::vector<std::array<float, 3>> filtering_lidsor_cpp(
     float threshold_distance = mean_dist + s * std_dist;
     
     // フィルタリング
-    std::vector<std::array<float, 3>> filtered_points;
+    std::vector<std::array<float, 4>> filtered_points;  // 4次元配列に変更
     filtered_points.reserve(num_points);
     
     for (size_t i = 0; i < num_points; ++i) {
         if (mean_distances[i] < threshold_distance && 
             mean_distances[i] < d_threshold && 
             intensities[i] > i_threshold) {
-            filtered_points.push_back(cloud.points[i]);
+            filtered_points.push_back({
+                cloud.points[i][0],
+                cloud.points[i][1],
+                cloud.points[i][2],
+                intensities[i]  // intensityを追加
+            });
         }
     }
+    
     
     return filtered_points;
 }
