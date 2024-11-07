@@ -10,7 +10,18 @@ Fast Outlier Removal Filter for LiDAR Point Clouds (C++ Implementation)
 - pybind11
 - nanoflann (included as a submodule)
 
-## Installation
+## Installation(from pip)
+```bash
+pip install git+https://github.com/waroron/lidsor_python.git
+
+# In case of using patchworkpp
+git clone https://github.com/url-kaist/patchwork-plusplus.git
+cd patchwork-plusplus
+make pyinstall
+
+```
+
+## Installation(Local build)
 ### 1. Clone the repository
 ```bash
 git clone https://github.com/your-username/lidsor_filter.git

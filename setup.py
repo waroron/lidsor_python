@@ -57,7 +57,7 @@ setup(
     description='Fast LIDSOR filtering implementation in C++',
     long_description=open('README.md').read(),
     long_description_content_type='text/markdown',
-    url='https://github.com/yourusername/lidsor_filter',
+    url='https://github.com/waroron/lidsor_python',
     ext_modules=[CMakeExtension('lidsor_filter')],
     cmdclass=dict(build_ext=CMakeBuild),
     zip_safe=False,

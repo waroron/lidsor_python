@@ -28,9 +28,9 @@ std::vector<std::array<float, 4>> filtering_lidsor_cpp(
     
     // 点群データの準備
     PointCloud cloud;
-    std::vector<float> intensities;
+    std::vector<float> scaled_intensities;
     cloud.points.reserve(num_points);
-    intensities.reserve(num_points);
+    scaled_intensities.reserve(num_points);
     
     for (size_t i = 0; i < num_points; ++i) {
         cloud.points.push_back({
@@ -38,9 +38,10 @@ std::vector<std::array<float, 4>> filtering_lidsor_cpp(
             points_buf(i, 1),
             points_buf(i, 2)
         });
-        float intensity = std::abs(points_buf(i, 3));
-        if (intensity <= 1.0f) intensity *= scaling_factor;
-        intensities.push_back(intensity);
+        float original_intensity = std::abs(points_buf(i, 3));
+        float scaled_intensity = original_intensity * scaling_factor;
+        // if (scaled_intensity <= 1.0f) scaled_intensity *= scaling_factor;
+        scaled_intensities.push_back(scaled_intensity);
     }
     
     // KD木の構築
@@ -95,12 +96,12 @@ std::vector<std::array<float, 4>> filtering_lidsor_cpp(
     for (size_t i = 0; i < num_points; ++i) {
         if (mean_distances[i] < threshold_distance && 
             mean_distances[i] < d_threshold && 
-            intensities[i] > i_threshold) {
+            scaled_intensities[i] > i_threshold) {
             filtered_points.push_back({
                 cloud.points[i][0],
                 cloud.points[i][1],
                 cloud.points[i][2],
-                intensities[i]  // intensityを追加
+                points_buf(i, 3)
             });
         }
     }
