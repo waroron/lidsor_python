@@ -15,7 +15,7 @@ struct PointCloud {
     bool kdtree_get_bbox(BBOX&) const { return false; }
 };
 
-std::vector<std::array<float, 4>> filtering_lidsor_cpp(
+std::tuple<std::vector<std::array<float, 4>>, std::vector<size_t>, std::vector<size_t>> filtering_lidsor_cpp(
     const py::array_t<float>& input_points,
     int k,
     float s,
@@ -90,8 +90,12 @@ std::vector<std::array<float, 4>> filtering_lidsor_cpp(
     float threshold_distance = mean_dist + s * std_dist;
     
     // フィルタリング
-    std::vector<std::array<float, 4>> filtered_points;  // 4次元配列に変更
+    std::vector<std::array<float, 4>> filtered_points;
+    std::vector<size_t> kept_indices;     // 残された点群のインデックス
+    std::vector<size_t> removed_indices;  // 除去された点群のインデックス
     filtered_points.reserve(num_points);
+    kept_indices.reserve(num_points);
+    removed_indices.reserve(num_points);
     
     for (size_t i = 0; i < num_points; ++i) {
         if (mean_distances[i] < threshold_distance && 
@@ -103,9 +107,11 @@ std::vector<std::array<float, 4>> filtering_lidsor_cpp(
                 cloud.points[i][2],
                 points_buf(i, 3)
             });
+            kept_indices.push_back(i);
+        } else {
+            removed_indices.push_back(i);
         }
     }
     
-    
-    return filtered_points;
+    return std::make_tuple(filtered_points, kept_indices, removed_indices);
 }

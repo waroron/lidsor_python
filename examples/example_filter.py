@@ -16,12 +16,13 @@ std_dev_threshold = 2.0
 
 # Apply LIDSOR filter
 start_time = time.time()
-filtered_points = filtering_lidsor_cpp(
+filtered_points, kept_indices, removed_indices = filtering_lidsor_cpp(
     point_cloud,
     k=k_neighbors,
     s=std_dev_threshold
 )
 end_time = time.time()
 print(f"Original points: {point_cloud.shape[0]}")
-print(f"Filtered points: {np.asarray(filtered_points).shape[0]}")
+print(f"Filtered points: {len(kept_indices)}")
+print(f"Removed points: {len(removed_indices)}")
 print(f"Time taken: {end_time - start_time:.6f} seconds")

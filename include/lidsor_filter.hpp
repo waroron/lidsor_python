@@ -7,7 +7,7 @@
 
 namespace py = pybind11;
 
-std::vector<std::array<float, 4>> filtering_lidsor_cpp(
+std::tuple<std::vector<std::array<float, 4>>, std::vector<size_t>, std::vector<size_t>> filtering_lidsor_cpp(
     const py::array_t<float>& points,
     int k = 30,
     float s = 2.0f,
